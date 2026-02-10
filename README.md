@@ -16,6 +16,12 @@ Este repositorio contiene ejercicios, experimentos y desarrollos asociados a con
 
 Desarrollar y documentar soluciones básicas de ingeniería de datos utilizando herramientas modernas, con un enfoque práctico y analítico.
 
+Objetivo: formar base sólida (SQL + diseño + calidad + ETL reproducible) sin Docker ni Spark.
+
+Dataset: NASA Exoplanet Archive (TAP) – tabla pscomppars (PSCompPars).
+
+Pipeline: raw → silver → gold (local), con checks de calidad y SQL reproducible.
+
 ### Objetivos específicos
 
 * Explorar bases de datos orientadas a análisis.
@@ -29,6 +35,10 @@ Desarrollar y documentar soluciones básicas de ingeniería de datos utilizando 
 
 ```text
 PROYECTO-INGEGOD/
+├── data/                   # Datos (datasets, archivos de entrada, etc.)
+   ├── gold/                
+   ├── raw/                   
+   ├── silver/                   
 ├── docs/                   # Documentación del proyecto
 ├── main.py                 # Script principal o punto de entrada
 ├── requirements.txt        # Dependencias del proyecto
@@ -115,9 +125,11 @@ Posibles extensiones del proyecto:
 
 ## 👥 Integrantes
 
-Listado de los integrantes del proyecto y sus roles, si aplica.
+### Juan Jose Gonzalez (06-juan:github)
 
----
+### Juan Esteban Martinez (JuanMartinez262205:github)
+
+### Daniel Felipe Calpa
 
 ## 📄 Licencia
 
