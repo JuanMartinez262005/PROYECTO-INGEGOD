@@ -3,6 +3,8 @@
 
 1.*Este documento registra las decisiones clave tomadas durante el desarrollo del proyecto. Cada entrada incluye la fecha, la decisión tomada, las opciones consideradas y la justificación para la elección final.*
 
+| Fecha 23/02/2026 JJ| Decisión: Se Realiza  notebook 2 y tereas,   se almacenan en docs/w02a_sql_practice.md| Justificación: Es tarea.|
+
 | Fecha 11/02/2026 JE| Decisión: Guardar SHA-256 del CSV raw en artifacts por cada ejecución. Implementación de querys para busqueda de datos. Solución de w01b y w02a. Se agregan columnas al Compars.csv. Se entrega evidencia json y md.| Opciones Consideradas: N/A| Justificación: Innecesaria.|
 
 | Fecha 10/02/2026 JE| Decisión: Se importan los datos raw desde el script download_exoplanets.py.| Opciones Consideradas: N/A| Justificación: Innecesaria.|
