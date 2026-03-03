@@ -15,3 +15,6 @@
 **OLTP** transactional, Procesamiento Rapido, normalizada, datos actuales (como comprar en olimpica)
 
 **Warehouse**:  los OLAP tiene agentes intermedios OLTP que son los que interactuan los usuarios ya que OLTP son mas rapidas y las OLAP permiten su analisis 
+
+**SSTables**: Archivos inmutables ordenados en disco.
+**LSM-Trees**: Estructura jerárquica que organiza SSTables.
