@@ -1,0 +1,51 @@
+{
+  "dataset": "nasa_exoplanets_pscomppars",
+  "version": "1.0.0",
+  "layers": {
+    "bronze": {
+      "source_view": "raw_ps",
+      "format": "csv_auto",
+      "description": "Carga inicial sin tipos estrictos (schema-on-read)."
+    },
+    "silver": {
+      "tables": {
+        "silver_planet": {
+          "description": "Tabla de paso con limpieza aplicada.",
+          "columns": 16,
+          "quality_rules": [
+            "pl_name & hostname: NOT NULL",
+            "disc_year: range [1980, 2026]",
+            "pl_rade: range (0, 30]",
+            "pl_bmasse & pl_eqt: strictly positive (>0)"
+          ]
+        },
+        "dim_host_full": {
+          "description": "Dimensi\u00f3n de estrellas anfitrionas (Grain: 1 fila por hostname).",
+          "key": "hostname",
+          "consolidation_strategy": "MAX(value) grouping by hostname",
+          "included_features": [
+            "ra",
+            "st_mass",
+            "sy_dist"
+          ]
+        },
+        "fact_planet": {
+          "description": "Tabla de hechos de exoplanetas.",
+          "key": "pl_name",
+          "uniqueness_method": "DISTINCT"
+        }
+      }
+    },
+    "gold": {
+      "views": [
+        "gold_by_host"
+      ],
+      "description": "Vistas listas para an\u00e1lisis de ratio radio-distancia."
+    }
+  },
+  "governance": {
+    "owner": "estudiante_data_eng",
+    "status": "active",
+    "notes": "Se filtraron planetas con masa o temperatura de equilibrio <= 0 por inviabilidad f\u00edsica."
+  }
+}
