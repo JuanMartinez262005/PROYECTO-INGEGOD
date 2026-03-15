@@ -3,6 +3,7 @@
 
 1.*Este documento registra las decisiones clave tomadas durante el desarrollo del proyecto. Cada entrada incluye la fecha, la decisión tomada, las opciones consideradas y la justificación para la elección final.*
 
+
 | Fecha 11/03/2026 JJ| Reglas de silver aplicadas
 | Evidencia: guardada en `data_contract_silver_v1.json`
 ┌─────────────────┬─────────────┬─────────┬─────────┬─────────┬─────────┐

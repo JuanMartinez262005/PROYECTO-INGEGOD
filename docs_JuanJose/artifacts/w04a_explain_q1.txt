@@ -1,0 +1,117 @@
+# TU TURNO 1: construir silver_planet (igual que el docente, pero tú decides 1 regla extra)
+# Elige UNA regla extra:
+# - (pl_orbper IS NULL OR pl_orbper > 0)
+# - (sy_dist  IS NULL OR sy_dist  > 0)
+# - (pl_eqt   IS NULL OR pl_eqt   > 0)
+
+con.execute("DROP TABLE IF EXISTS silver_planet")
+
+q = '''
+CREATE OR REPLACE TABLE silver_planet AS 
+SELECT pl_name, 
+    hostname,
+    discoverymethod,
+    disc_year,
+    sy_snum,
+    sy_pnum, 
+    sy_dist, 
+    ra, 
+    dec, 
+    pl_orbper, 
+    pl_rade, 
+    pl_bmasse, 
+    pl_eqt, 
+    st_teff, 
+    st_rad, 
+    st_mass,
+FROM raw_ps
+WHERE pl_name IS NOT NULL 
+    AND hostname IS NOT NULL
+    AND (disc_year IS NULL OR disc_year BETWEEN 1980 AND 2026)
+    AND (pl_rade IS NULL OR pl_rade BETWEEN 0 AND 30)
+    AND (pl_bmasse IS NULL OR pl_bmasse > 0)
+    AND (pl_eqt IS NULL OR pl_eqt > 0)
+'''
+
+con.sql(q)
+
+a = con.sql("EXPLAIN ANALYZE" + q).fetchall()
+print(a[0][1])
+
+# Validación:
+#con.sql("SELECT COUNT(*) AS n_rows, COUNT(DISTINCT pl_name) AS n_pl FROM silver_planet").show()
+
+┌─────────────────────────────────────┐
+│┌───────────────────────────────────┐│
+││    Query Profiling Information    ││
+│└───────────────────────────────────┘│
+└─────────────────────────────────────┘
+EXPLAIN ANALYZE CREATE OR REPLACE TABLE silver_planet AS  SELECT pl_name,      hostname,     discoverymethod,     disc_year,     sy_snum,     sy_pnum,      sy_dist,      ra,      dec,      pl_orbper,      pl_rade,      pl_bmasse,      pl_eqt,      st_teff,      st_rad,      st_mass, FROM raw_ps WHERE pl_name IS NOT NULL      AND hostname IS NOT NULL     AND (disc_year IS NULL OR disc_year BETWEEN 1980 AND 2026)     AND (pl_rade IS NULL OR pl_rade BETWEEN 0 AND 30)     AND (pl_bmasse IS NULL OR pl_bmasse > 0)     AND (pl_eqt IS NULL OR pl_eqt > 0) 
+┌────────────────────────────────────────────────┐
+│┌──────────────────────────────────────────────┐│
+││              Total Time: 0.0703s             ││
+│└──────────────────────────────────────────────┘│
+└────────────────────────────────────────────────┘
+┌───────────────────────────┐
+│           QUERY           │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│      EXPLAIN_ANALYZE      │
+│    ────────────────────   │
+│           0 rows          │
+│          (0.00s)          │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│   BATCH_CREATE_TABLE_AS   │
+│    ────────────────────   │
+│           1 row           │
+│          (0.00s)          │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│           FILTER          │
+│    ────────────────────   │
+│ ((pl_name IS NOT NULL) AND│
+│   (hostname IS NOT NULL)  │
+│  AND ((pl_bmasse IS NULL) │
+│  OR (pl_bmasse > 0.0)) AND│
+│    ((pl_eqt IS NULL) OR   │
+│   (pl_eqt > 0.0)) AND (   │
+│  (disc_year IS NULL) OR ( │
+│  (disc_year >= 1980) AND  │
+│ (disc_year <= 2026))) AND │
+│  ((pl_rade IS NULL) OR (  │
+│   (pl_rade >= 0.0) AND    │
+│    (pl_rade <= 30.0))))   │
+│                           │
+│         6,101 rows        │
+│          (0.00s)          │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         TABLE_SCAN        │
+│    ────────────────────   │
+│         Function:         │
+│       READ_CSV_AUTO       │
+│                           │
+│        Projections:       │
+│          pl_name          │
+│          hostname         │
+│      discoverymethod      │
+│         disc_year         │
+│          sy_snum          │
+│          sy_pnum          │
+│          sy_dist          │
+│             ra            │
+│            dec            │
+│         pl_orbper         │
+│          pl_rade          │
+│         pl_bmasse         │
+│           pl_eqt          │
+│          st_teff          │
+│           st_rad          │
+│          st_mass          │
+│                           │
+│    Total Files Read: 1    │
+│                           │
+│         6,107 rows        │
+│          (0.01s)          │
+└───────────────────────────┘
