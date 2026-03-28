@@ -3,6 +3,56 @@
 
 1.*Este documento registra las decisiones clave tomadas durante el desarrollo del proyecto. Cada entrada incluye la fecha, la decisión tomada, las opciones consideradas y la justificación para la elección final.*
 
+---
+
+## Decisión 3: Orquestación y Umbrales de Tiempo (SLA)
+
+**Fecha:** 2026-03-28  
+**Contexto:** Necesitamos asegurar que el pipeline sea eficiente y no crezca en tiempo de ejecución de forma descontrolada al procesar los ~6,100 registros.
+
+**Decisión:** Implementar un runner centralizado que mida tiempos por etapa y establecer un umbral de éxito (SLA) de **menos de 5 segundos** para la etapa de dimensiones (`dims`).
+
+**Evidencia:**
+* **Métrica actual:** `dims` tomó **0.7521s**.
+* **Estado:** ✅ CUMPLE (muy por debajo del umbral de 5s).
+* **Conteo de filas:** 4,550 estrellas y 6,101 planetas procesados correctamente.
+
+**Justificación:** Medir el tiempo nos permite detectar problemas de rendimiento si el volumen de datos de la NASA crece en el futuro.
+
+---
+
+## Implementación de Surrogate Keys (SK) y Foreign Keys (FK)
+
+**Fecha:** 2026-03-28  
+**Contexto:** Originalmente, las tablas se unían mediante el nombre de la estrella (`hostname`), lo cual es ineficiente y propenso a errores si los nombres cambian o tienen caracteres especiales.
+
+**Decisión:** Creamos la tabla `dim_host_sk` generando un identificador único numérico (`host_id`) mediante la función `ROW_NUMBER()`. Este ID actúa como nuestra "Llave Subrogada" (Surrogate Key).
+
+**Justificación (Imagen Mental del Hotel):** * **El Problema:** Usar el nombre del huésped ("Sr. Alpha Centauri") para registrar pedidos es caótico si el nombre cambia o es muy largo.
+* **La Solución:** Asignamos un **Número de Habitación** (`host_id`). Es un número pequeño, rápido de leer para el sistema y nunca cambia, sin importar el nombre del huésped.
+* **Integridad:** La FK actúa como un guardia que no permite registrar un planeta en una habitación que no existe.
+
+**Evidencia:** * `orphan_rows`: 0 (confirmado mediante anti-join).
+* Unicidad: 4550 hosts únicos con 4550 IDs únicos.
+
+---
+
+## Definición de Capas Gold y Métricas de Negocio
+
+**Fecha:** 2026-03-28  
+**Contexto:** Los científicos necesitan entender no solo cuántos planetas hay, sino sus características físicas generales según cómo fueron encontrados o dónde están.
+
+**Decisión:** Materializamos dos vistas finales (`gold_by_discoverymethod` y `gold_by_host`) que incluyen agregaciones de masa (`pl_bmasse`) y radio (`pl_rade`).
+
+**Justificación:** * **Agregación por Método:** Permite identificar sesgos (ej. si el método de Tránsito encuentra mayormente planetas pequeños comparado con Imagen Directa).
+* **Agregación por Host:** Identifica sistemas multi-planetarios "poblados" como TRAPPIST-1, facilitando el estudio de zonas de habitabilidad.
+
+**Evidencia:** * Archivos generados en `artifacts/`: `gold_by_discoverymethod.csv` y `gold_by_host.csv`.
+
+---
+
+
+
 
 | Fecha 11/03/2026 JJ| Reglas de silver aplicadas
 | Evidencia: guardada en `data_contract_silver_v1.json`

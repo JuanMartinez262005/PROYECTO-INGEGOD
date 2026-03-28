@@ -1,0 +1,46 @@
+{
+  "w": "W07B",
+  "timestamp_utc": "2026-03-28T17:48:23.479797+00:00",
+  "python": "3.12.10",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "project_root": "C:\\Users\\juanj\\Documentos\\Semestre7\\IngenieriaDatos\\PROYECTO-INGEGOD\\docs_JuanJose",
+  "db_path": "C:\\Users\\juanj\\Documentos\\Semestre7\\IngenieriaDatos\\PROYECTO-INGEGOD\\docs_JuanJose\\data\\exoplanets.duckdb",
+  "raw_csv": "C:\\Users\\juanj\\Documentos\\Semestre7\\IngenieriaDatos\\PROYECTO-INGEGOD\\docs_JuanJose\\data\\raw\\pscomppars.csv",
+  "stages": [
+    {
+      "mode": "silver",
+      "return_code": 0,
+      "seconds": 0.1983
+    },
+    {
+      "mode": "dims",
+      "return_code": 0,
+      "seconds": 0.7452
+    },
+    {
+      "mode": "gold",
+      "return_code": 0,
+      "seconds": 0.1264
+    },
+    {
+      "mode": "export",
+      "return_code": 0,
+      "seconds": 0.1417
+    }
+  ],
+  "counts": {
+    "silver_planet": 6101,
+    "dim_host_sk": 4550,
+    "fact_planet_sk": 6101
+  },
+  "artifacts": {
+    "gold_by_discoverymethod": {
+      "exists": true,
+      "bytes": 762
+    },
+    "gold_by_host": {
+      "exists": true,
+      "bytes": 266992
+    }
+  }
+}
